@@ -12,6 +12,7 @@ import math
 import time
 import thread
 import threading
+from collections import deque
 
 # some module-level definitions for the robot commands
 START = chr(128)    # already converted to bytes...
@@ -1430,10 +1431,13 @@ class Create:
             dataGetter = sensorDataInterpreter[sensorNum]
             interpretedData = 0
             
-            if (width == 1):
-                interpretedData = dataGetter(r[startofdata])
-            if (width == 2):
+            try:
+              if (width == 1):
+                  interpretedData = dataGetter(r[startofdata])
+              if (width == 2):
                 interpretedData = dataGetter(r[startofdata], r[startofdata+1] )
+            except (Exception):
+              break
                 
             # add to our dictionary
             self.sensord[sensorNum] = interpretedData
@@ -1700,6 +1704,14 @@ class Create:
 
     def text(self):
         return "Correct classese"
+    
+    def write_serial(self, list):
+      list = deque(list)
+      while 1:
+        try:
+          self.ser.write(chr(list.shift()))
+        except (Exception):
+          break
 
 
 class RoombaRobot:
