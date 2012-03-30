@@ -48,7 +48,7 @@ function Step(type) {
       };  
     }
   }).bind(this);
-}
+};
 
 var stepTypes = [{
   typeId: 'driveForward',
@@ -66,7 +66,7 @@ var stepTypes = [{
   typeId: 'turnRight',
   typeName: 'Turn Right',
   tag: 'turn'
-}]
+}];
 
 var viewModel = {
   stepTypes: stepTypes,
