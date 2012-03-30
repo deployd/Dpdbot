@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dpdbot</title>
+  <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+  <link href="css/bootstrap-responsive.min.css" type="text/css" rel="stylesheet" />
+  <link href="css/style.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <h1>Dpdbot</h1>
+    <br />
+    <div id="programming-ui">
+      <form class="form form-inline">
+        <p class="well" data-bind="visible: !(steps().length)">No steps</p>
+        <div data-bind="foreach: steps">
+          <div class="well">
+            <select data-bind="options: $root.stepTypes, optionsText: 'typeName', value: type"></select>
+            <span data-bind="if: typeTag() === 'drive'">
+              <input type="number" min="1" max="30" data-bind="numberValue: seconds" />
+              <label>seconds</label>
+            </span>
+            <span data-bind="if: typeTag() === 'turn'">
+              <input type="number" min="1" max="180" data-bind="numberValue: degrees" />
+              <label>degrees</label>
+            </span>
+            <button type="button" class="btn pull-right" data-bind="click: $parent.removeStep"><i class="icon-remove"></i></button>
+          </div>
+        </div>
+        <div class="clearfix">
+          <button type="button" class="btn" data-bind="click: addStep">Add step</button>
+          <div class="pull-right">
+            <span data-bind="text: totalSeconds"></span> / <span data-bind="text: maxSeconds"></span> seconds
+          </div>
+        </div>
+        <hr />
+        <p>
+          <label>Twitter Handle: <input type="text" placeholder="@handle" data-bind="value: twitterHandle, valueUpdate: 'afterkeydown'" /></label>
+        </p>
+        <p>
+          <button type="submit" class="btn btn-primary" data-bind="click: submit, enable: isValid">Submit</button>
+        </p>
+      </form>
+    </div>
+  </div>
+  <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/knockout-2.0.0.js"></script>
+  <script type="text/javascript" src="js/sugar-1.2.4.min.js"></script>
+  <script type="text/javascript" src="js/index.js"></script>
+</body>
+</html>
