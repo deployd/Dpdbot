@@ -1,1 +1,66 @@
- 
+.gradient-panel {
+  background-image: -webkit-linear-gradient(top, #ffffff, #eeeeee); 
+  border: #333333 1px solid;
+
+  &.highlight {
+    background-image: -webkit-linear-gradient(top, #99F, #33C);
+    color: white;
+  }
+}
+
+.listItem {
+  padding: 10px;
+  margin-bottom: 4px;
+
+  .gradient-panel;
+
+  .number {
+    font-size: 40px;
+    display: inline-block;
+    vertical-align: middle;
+    padding-right: 10px;
+  }
+}
+
+#threeLeaderboard {
+
+  width: 320px;
+  margin: 0 auto;
+
+  .score {
+    display: inline-block;
+    padding: 10px;
+    margin-right: 10px;
+    width: 75px;
+    text-align: center;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    .gradient-panel;
+
+    .place {
+      font-size: 40px;
+      margin: 10px 0;
+      display: block;
+    }
+
+    .points {
+      display: block;
+      
+    }
+
+    .handle {
+      display: block;
+      font-size: 14px;
+    }
+  }
+}
+
+#resultTable {
+  th {
+    width: 100px;
+    background: #eeeeee;
+  }
+}

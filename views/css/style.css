@@ -1,1 +1,2 @@
-
+.queueItem{background-image:-webkit-linear-gradient(top, #ffffff, #eeeeee);padding:10px;margin-bottom:4px;border:#333333 1px solid;}.queueItem.highlight{background-image:-webkit-linear-gradient(top, #9999ff, #3333cc);color:white;}
+.queueItem .number{font-size:40px;display:inline-block;vertical-align:middle;padding-right:10px;}
