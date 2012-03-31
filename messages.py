@@ -33,7 +33,7 @@ class Messages:
 	#User either gets a personal greeting or standard greeting
 	global greeting_begins
 	greeting_begins = {
-	  'with_bio': "Hello <name>. I just red your twitter bio."
+	  'with_bio': "Hello <name>. I just red your twitter bio, "
 	  , 'standard': "Let's do this, <name>"
 	}
 
@@ -42,8 +42,9 @@ class Messages:
 	greeting_ends = [
 	  "You make me sick"
 	  , "I'm so proud of you."
+		,	"[[rate 90]] tell me more?"
 	  , "That's a damn good bio."
-	  , "You're okay in my buk."
+	  , "You're okay in my book."
 	  , "I wish I had a fist to punch you."
 	  , "I would so fall oh you."
 	  , "140 characters have never been more wasted"
@@ -51,7 +52,6 @@ class Messages:
 	]
 	
 	global get_random
-	
 	def get_random(collection):
 	  return collection[int(round((random.random() * (len(collection) - 1))))]
 	@staticmethod
@@ -67,4 +67,5 @@ class Messages:
 		if bio is False:
 			return greeting_begins['standard'].replace('<name>', name)
 		else:
-			return greeting_begins['bio'].replace('<name>', name) + bio + get_random(greeting_ends)
+			bio.replace('.', '?')
+			return greeting_begins['with_bio'].replace('<name>', name) + bio + '? '+ get_random(greeting_ends)
