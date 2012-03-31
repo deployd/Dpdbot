@@ -4,18 +4,20 @@
   <title>Dpdbot</title>
   <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet" />
   <link href="css/bootstrap-responsive.min.css" type="text/css" rel="stylesheet" />
-  <link href="css/style.css" type="text/css" rel="stylesheet" />
+  <link href="css/style.less" type="text/css" rel="stylesheet/less" />
+
+  <script type="text/javascript" src="js/less-1.3.0.min.js"></script>
 </head>
 <body>
   <div class="container">
-    <h1>Dpdbot</h1>
+    <h1>Dpdbot - <span data-bind="text: status"></span></h1>
     <br />
-    <div id="programming-ui">
+    <!-- ko if: !queue() && !result() -->
+    <div id="programming-ui" data-bind="with: program">
       <form class="form form-inline">
-        <p class="well" data-bind="visible: !(steps().length)">No steps</p>
         <div data-bind="foreach: steps">
           <div class="well">
-            <select data-bind="options: $root.stepTypes, optionsText: 'typeName', value: type"></select>
+            <select data-bind="options: $parent.stepTypes, optionsText: 'typeName', value: type"></select>
             <span data-bind="if: typeTag() === 'drive'">
               <input type="number" min="1" max="30" data-bind="numberValue: seconds" />
               <label>seconds</label>
@@ -42,11 +44,83 @@
         </p>
       </form>
     </div>
+    <!-- /ko -->
+
+    <!-- ko if: queue() -->
+      <h2>Leaderboard</h2>
+      <!-- ko with: leaderboard -->
+      <div id="threeLeaderboard" data-bind="foreach: topThreeScores">
+        <div class="score">
+          <span class="place" data-bind="text: place"></span>
+          <span class="points" data-bind="text: pointsFormatted"></span>
+          <span class="handle" data-bind="text: twitterHandle"></span>
+        </div>
+      </div>
+      <!-- /ko -->
+      <div id="queue" data-bind="with: queue">
+        <h2>Current Queue</h2>
+        <div class="queue" data-bind="foreach: queuedPrograms">
+          <div class="listItem" data-bind="css: {highlight: isOwned}">
+            <span class="number" data-bind="text: number"></span> 
+            <span data-bind="text: twitterHandle"></span>
+          </div>
+        </div>
+        <button class="btn" data-bind="click: cancel, visible: isWaiting() || !ownedProgram()">Cancel</button>
+      </div>
+      
+    <!-- /ko -->
+
+    <!-- ko if: result() -->
+      <div data-bind="with: result">
+        <h2>Your Score: <span data-bind="text: score"></span></h2>
+        <br />
+        <!-- ko with: $root.leaderboard -->
+          <div id="leaderboard" data-bind="foreach: scores">
+            <div class="listItem" data-bind="css: {highlight: isOwned}">
+              <span class="number" class="place" data-bind="text: place"></span>
+              <span class="points" data-bind="text: pointsFormatted"></span>
+              <span class="handle" data-bind="text: twitterHandle"></span>
+            </div>
+          </div>
+          <!-- /ko -->
+          <br />  
+          <table id="resultTable" class="table table-bordered">
+            <tr>
+              <th>Finished</th>
+              <td><i data-bind="css: {'icon-ok': completed, 'icon-remove': !completed()}"></i></td>
+            </tr>
+            <tr>
+              <th>Distance</th>
+              <td><span data-bind="text: distance().toFixed(1)"></span> feet</td>
+            </tr>
+            <tr>
+              <th>Time</th>
+              <td><span data-bind="text: time().toFixed(1)"></span> seconds</td>
+            </tr>
+            <tr>
+              <th>Score</th>
+              <td><span data-bind="text: score"></span> points</td>
+            </tr>
+          </table>
+          <button class="btn btn-primary" data-bind="click: close">Try again</button>
+      </div>
+    <!-- /ko -->
+
   </div>
+    
   <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
   <script type="text/javascript" src="js/knockout-2.0.0.js"></script>
+  <script type="text/javascript" src="js/knockout.mapping.js"></script>
   <script type="text/javascript" src="js/sugar-1.2.4.min.js"></script>
+  <script type="text/javascript" src="js/utils.js"></script>
+  <script type="text/javascript" src="js/index-program.js"></script>
+  <script type="text/javascript" src="js/index-queue.js"></script>
+  <script type="text/javascript" src="js/index-result.js"></script>
   <script type="text/javascript" src="js/index.js"></script>
+  <script type="text/javascript" src="js/index-leaderboard.js"></script>
+  <script type="text/javascript">
+    ko.applyBindings(viewModel);
+  </script>
 </body>
 </html>
