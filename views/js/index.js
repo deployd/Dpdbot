@@ -25,3 +25,5 @@ viewModel.status = ko.computed(function() {
     return "Executing";
   } 
 }, viewModel);
+
+$('.container').show();

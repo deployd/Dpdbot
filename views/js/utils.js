@@ -1,16 +1,41 @@
 function url(path) {
-  return 'http://localhost:2403' + path;
+  return 'http://dpdbot.deploydapp.com' + path;
 }
 
 ko.bindingHandlers.numberValue = {
   init: function(element, valueAccessor) {
     var prop = valueAccessor();
     $(element).on('input', function() {
-      prop(parseInt($(this).val()));
+      prop(parseFloat($(this).val()));
     });
   },
   update: function(element, valueAccessor) {
     var prop = valueAccessor();
-    $(element).val(prop());
+    if (isNaN(prop())) {
+      $(element).val("");
+    } else {
+      $(element).val(prop());
+    }
   }
 };
+
+ko.bindingHandlers.jqSlider = {
+  init: function(element, valueAccessor) {
+    var options = valueAccessor();
+    var val = ko.utils.unwrapObservable(options.value);
+    $(element).slider({
+      range: 'min',
+      value: val,
+      min: options.min || 0,
+      max: options.max,
+      step: options.step || 1,
+      slide: function(event, ui) {
+        options.value(ui.value)
+      }
+    });
+  }, update: function(element, valueAccessor) {
+    var options = valueAccessor();
+    var val = ko.utils.unwrapObservable(options.value);
+    $(element).slider('value', val);
+  }
+}

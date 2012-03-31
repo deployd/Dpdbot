@@ -4,7 +4,7 @@ function createQueueViewModel(id) {
     var self = ko.mapping.fromJS(data);
 
     self.number = ko.computed(function() {
-      return queueViewModel.queuedPrograms().indexOf(self) + 1;
+      return queueViewModel.queuedPrograms.indexOf(self) + 1;
     }, self);
 
     self.isOwned = ko.computed(function() {

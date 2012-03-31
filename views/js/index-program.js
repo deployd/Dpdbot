@@ -57,7 +57,9 @@ var programViewModel = {
   maxSeconds: 30,
 
   steps: ko.observableArray(),
-  twitterHandle: ko.observable('')
+  twitterHandle: ko.observable(''),
+
+  addStepType: ko.observable()
 };
 
 programViewModel.totalSeconds = ko.computed(function() {
@@ -80,17 +82,20 @@ programViewModel.isValid = ko.computed(function() {
   return true
 }, programViewModel);
 
+ko.computed(function() {
+  var type = this.addStepType();
+  if (type) {
+    this.addStepType(undefined);
+    this.steps.push(new Step(type));
+  }
+}, programViewModel);
+
 programViewModel.addStep = (function() {
   this.steps.push(new Step(stepTypes[0]));
 }).bind(programViewModel);
 
 programViewModel.removeStep = (function(step) {
   this.steps.remove(step);
-}).bind(programViewModel);
-
-programViewModel.changeStep = (function(step) {
-  var index = this.steps.indexOf(step);
-  this.steps.splice(index, 1, new step.type());
 }).bind(programViewModel);
 
 programViewModel.submit = (function() {

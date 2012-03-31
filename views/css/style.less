@@ -1,9 +1,45 @@
+select {
+  width: 130px;
+} 
+
+input[type=number] {
+  width: 40px;
+}
+
+.step {
+
+  .input-container {
+    position: relative;
+    height: 30px;
+
+    .input {
+      position: absolute;
+      text-align: right;
+      right: 0;
+      width: 120px;
+    }
+
+    .ui-slider {
+      position: absolute;
+      left: 0px;
+      top: 7px;
+      right: 120px;
+    }
+  }
+
+}
+
+
+
 .gradient-panel {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #eeeeee));
   background-image: -webkit-linear-gradient(top, #ffffff, #eeeeee); 
   border: #333333 1px solid;
 
   &.highlight {
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #99F), color-stop(100%, #33C));
     background-image: -webkit-linear-gradient(top, #99F, #33C);
+
     color: white;
   }
 }
@@ -30,7 +66,7 @@
   .score {
     display: inline-block;
     padding: 10px;
-    margin-right: 10px;
+    margin-right: 4px;
     width: 75px;
     text-align: center;
 
@@ -53,7 +89,7 @@
 
     .handle {
       display: block;
-      font-size: 14px;
+      font-size: 10px;
     }
   }
 }
