@@ -39,3 +39,16 @@ ko.bindingHandlers.jqSlider = {
     $(element).slider('value', val);
   }
 }
+
+function getLeaderboard(mapping, viewModel) {
+  var query = {
+    $orderby: {
+      score: -1,
+      programLength: 1
+    }
+  };
+  $.get(url('/scores?q=' + JSON.stringify(query)), function(res) {
+    res = res || [];
+    ko.mapping.fromJS({scores: res}, mapping, viewModel);
+  });
+}

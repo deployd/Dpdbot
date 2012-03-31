@@ -15,9 +15,11 @@
 <body>
   <div class="container" style="display: none">
     <h1>Dpdbot - <span data-bind="text: status"></span></h1>
-    <br />
+    <a href="leaderboard.html" data-bind="visible: !queue() && !result()">Leaderboard</a>
+    <p>&nbsp;</p>
     <!-- ko if: !queue() && !result() -->
     <div id="programming-ui" data-bind="with: program">
+
       <form class="form form-inline" onsubmit="return false;">
         <div data-bind="foreach: steps">
           <div class="well step">

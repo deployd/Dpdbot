@@ -40,16 +40,7 @@ leaderboardViewModel.isVisible = ko.computed(function() {
 }, leaderboardViewModel);
 
 leaderboardViewModel.updateScores = (function() {
-  var query = {
-    $orderby: {
-      score: -1,
-      programLength: 1
-    }
-  };
-  $.get(url('/scores?q=' + JSON.stringify(query)), function(res) {
-      res = res || [];
-      ko.mapping.fromJS({scores: res}, scoreMapping, leaderboardViewModel);
-  });
+  getLeaderboard(scoreMapping, leaderboardViewModel);
 }).bind(leaderboardViewModel);
 
 leaderboardViewModel.updateScores();
