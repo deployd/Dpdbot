@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dpdbot</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+  <link href="css/bootstrap-responsive.min.css" type="text/css" rel="stylesheet" />
+  <link href="css/style.less" type="text/css" rel="stylesheet/less" />
+
+  <script type="text/javascript" src="js/less-1.3.0.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Dpdbot</h1>
+    <a href="index.html">Submit a program</a>
+    <div class="row-fluid">
+      <div class="span9">
+        <h2>Leaderboard</h2>
+        <div data-bind="foreach: scores">
+          <div class="listItem">
+            <span class="number" class="place" data-bind="text: place"></span>
+            <span class="handle" data-bind="text: twitterHandle"></span>
+            <span class="points pull-right" data-bind="text: pointsFormatted"></span>
+          </div>
+        </div>
+      </div>
+      <div class="span3">
+        <h2>Current Queue</h2>
+        <div data-bind="foreach: queue">
+          <div class="listItem">
+            <span class="number" data-bind="text: number"></span> 
+            <span data-bind="text: twitterHandle"></span>
+            <div class="pull-right"><span data-bind="text: seconds"></span> seconds</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/knockout-2.0.0.js"></script>
+  <script type="text/javascript" src="js/knockout.mapping.js"></script>
+  <script type="text/javascript" src="js/sugar-1.2.4.min.js"></script>
+  <script type="text/javascript" src="js/utils.js"></script>
+
+  <script type="text/javascript" src="js/leaderboard.js"></script>
+</body>
+</html>

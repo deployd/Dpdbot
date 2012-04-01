@@ -2,37 +2,54 @@
 <html>
 <head>
   <title>Dpdbot</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet" />
   <link href="css/bootstrap-responsive.min.css" type="text/css" rel="stylesheet" />
+  <link href="css/jquery-ui-1.8.18.custom.css" type="text/css" rel="stylesheet" />
   <link href="css/style.less" type="text/css" rel="stylesheet/less" />
 
   <script type="text/javascript" src="js/less-1.3.0.min.js"></script>
 </head>
 <body>
-  <div class="container">
+  <div class="container" style="display: none">
     <h1>Dpdbot - <span data-bind="text: status"></span></h1>
-    <br />
+    <a href="leaderboard.html" data-bind="visible: !queue() && !result()">Leaderboard</a>
+    <p>&nbsp;</p>
     <!-- ko if: !queue() && !result() -->
     <div id="programming-ui" data-bind="with: program">
-      <form class="form form-inline">
+
+      <form class="form form-inline" onsubmit="return false;">
         <div data-bind="foreach: steps">
-          <div class="well">
-            <select data-bind="options: $parent.stepTypes, optionsText: 'typeName', value: type"></select>
-            <span data-bind="if: typeTag() === 'drive'">
-              <input type="number" min="1" max="30" data-bind="numberValue: seconds" />
-              <label>seconds</label>
-            </span>
-            <span data-bind="if: typeTag() === 'turn'">
-              <input type="number" min="1" max="180" data-bind="numberValue: degrees" />
-              <label>degrees</label>
-            </span>
-            <button type="button" class="btn pull-right" data-bind="click: $parent.removeStep"><i class="icon-remove"></i></button>
+          <div class="well step">
+            <div class="clearfix">
+              <select data-bind="options: $parent.stepTypes, optionsText: 'typeName', value: type"></select>
+              <button type="button" class="btn pull-right" data-bind="click: $parent.removeStep"><i class="icon-remove"></i></button>
+            </div>
+            <br />
+            <div class="input-container" data-bind="if: typeTag() === 'drive', visible: typeTag() === 'drive'">
+              <div data-bind="jqSlider: {value: seconds, min: 0.1, max: 5, step: 0.1}"></div>
+              <div class="input">
+                <input type="number" min="0.1" step="0.1" max="30" data-bind="numberValue: seconds" />
+                <label>seconds</label>
+              </div>
+            </div>
+            <div class="input-container" data-bind="if: typeTag() === 'turn', visible: typeTag() === 'turn'">
+              <div data-bind="jqSlider: {value: degrees, min: 1, max: 180}"></div>
+              <div class="input">
+                <input type="number" min="1" max="180" data-bind="numberValue: degrees" />
+                <label>degrees</label>
+              </div>
+            </div>
+            
           </div>
         </div>
         <div class="clearfix">
-          <button type="button" class="btn" data-bind="click: addStep">Add step</button>
+          <select data-bind="options: stepTypes, optionsText: 'typeName', value: addStepType, optionsCaption: 'Add a step...'"></select>
+          <!-- <button type="button" class="btn" data-bind="click: addStep">Add step</button> -->
           <div class="pull-right">
-            <span data-bind="text: totalSeconds"></span> / <span data-bind="text: maxSeconds"></span> seconds
+            <span data-bind="text: totalSeconds().toFixed(1)"></span> / <span data-bind="text: maxSeconds"></span> seconds
           </div>
         </div>
         <hr />
@@ -63,6 +80,7 @@
           <div class="listItem" data-bind="css: {highlight: isOwned}">
             <span class="number" data-bind="text: number"></span> 
             <span data-bind="text: twitterHandle"></span>
+            <div class="pull-right"><span data-bind="text: seconds"></span> seconds</div>
           </div>
         </div>
         <button class="btn" data-bind="click: cancel, visible: isWaiting() || !ownedProgram()">Cancel</button>
@@ -109,6 +127,8 @@
   </div>
     
   <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript" src="js/jquery-ui-1.8.18.custom.min.js"></script>
+  <script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
   <script type="text/javascript" src="js/knockout-2.0.0.js"></script>
   <script type="text/javascript" src="js/knockout.mapping.js"></script>
