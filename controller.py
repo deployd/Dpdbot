@@ -7,6 +7,7 @@ import subprocess
 import json
 from messages import Messages
 from collections import deque
+import datetime
 
 #Constants
 SERVER = "http://dpdbot.deploydapp.com"
@@ -23,18 +24,26 @@ def robot_data(data):
 	print 'The robot is telling me something', data
 
 def start_game ():
-	print 'Let the games begin.'
-	global current_program
-	current_program = load_program()
-	start_program()
+    print 'Let the games begin.'
+    global current_program
+    current_program = load_program()
+    if current_program is not False:
+        start_program()
+    else:
+        time.sleep(10)
+        start_game()
 
 def stop_bot ():
     bot.command('stop');
 
 def start_program ():
     #initialize the driver
+    POLLING_MILLISECONDS = 50.0
+    POLLING_SECONDS = POLLING_MILLISECONDS / 1000.0
     global bot
     global current_program
+    current_program['time'] = 0
+    current_program['distance'] = 0
     bot = create.Create('/dev/tty.usbserial-ftDII8Z7')
     bot.toFullMode()
     
@@ -54,6 +63,7 @@ def start_program ():
     bot.Go(0, 90)
     time.sleep(2)
     bot.stop()
+    time.sleep(0.5)
     
     def drive_forward (step):
         print "drive_forward"
@@ -96,15 +106,27 @@ def start_program ():
             "Hit a wall"
             break
 		
-        milliseconds = commands.get(step['type'])(step)
-        print "milliseconds returned"
-        print milliseconds
-        milliseconds = milliseconds * 1000
+        seconds = commands.get(step['type'])(step)
+        start_time = datetime.datetime.now()
+        print "start time"
+        print start_time
+        current_time = datetime.datetime.now()
+        print "current time"
+        print current_time
+        delta = current_time - start_time
+        print "delta"
+        print delta
         
-        while milliseconds > 0:
-            #Loops 10 times a second
+        while seconds > delta.seconds:
             #Doesn't care what's running right now.
-            milliseconds -= 15
+            current_program['time'] += delta.microseconds / 10000000.0
+            
+            if step['type'] == 'driveForward' or step['type'] == 'driveBackward':
+                current_program['distance'] += ((delta.microseconds / 10000000.0) * 500.0)
+            else:
+                print "step type was not driving"
+                print step['type']
+            
             sensors = bot.sensors()
             print sensors[7]
             print sensors[13]
@@ -117,8 +139,11 @@ def start_program ():
                 break
             first_time = False
 
-            #Sleep for 100ms
+            #Sleep then loop
             time.sleep(0.015)
+            current_time = datetime.datetime.now()
+            delta = current_time - start_time
+            
 	
     print "stopping bot"
     bot.stop()
@@ -145,7 +170,6 @@ def get_twitter_bio (sn):
 def load_program ():
     #Load the top program from the server.
     #TODO: Check again later if no program is loaded
-    say('Loading program.')
 	
     try:
         reqUrl = SERVER+'/programs?q='+urllib2.quote('{"executed":false}')
@@ -179,14 +203,20 @@ def load_program ():
     except Exception as e:
         print "No program to load"
         print e
+        return False
 
 def start_after_dock():
     global bot
     global current_program
+
+    print "distance before calculating"
+    print current_program['distance']
+    current_program['distance'] = (current_program['distance'] * 0.0393700787) / 12
+    
     try:
         print "About to post score"
         #TODO: add distance and time
-        valueObject = json.dumps({'twitterHandle': current_program['twitterHandle'], 'robotSecurityKey': 'DPDSECRET123', 'completed':False, 'time': 0, 'distance': 0})
+        valueObject = json.dumps({'twitterHandle': current_program['twitterHandle'], 'robotSecretKey': 'DPDSECRET123', 'completed':current_program['completed'], 'time': current_program['time'], 'distance': current_program['distance']})
         print valueObject
         route = SERVER+'/scores'
         score = urllib2.urlopen(route, valueObject)
@@ -231,18 +261,25 @@ def start_after_dock():
 def mission_success ():
     print "mission_success"
     say(Messages.success())
+    global current_program
+    current_program['completed'] = True
     start_after_dock()
 
 def mission_crashed():
     print "mission_crashed"
+    global current_program
     say(Messages.failure())
+    current_program['completed'] = False
     start_after_dock()
 
 def mission_failed ():
     print "mission_failed"
     say("You disappoint me")
+    global current_program
+    current_program['completed'] = False
     start_after_dock()
 
+say("Let's Play")
 start_game()
 
 # say(Messages.greeting('voodootikigod', get_twitter_bio('voodootikigod')))

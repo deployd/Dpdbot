@@ -18,6 +18,7 @@ class Messages:
 	  , "Who put this wall here!"
 	  , "I enjoyed our drive together."
 	  , "We should do this again sometime not."
+	  , "It's my turn to drive you now."
 	  , "That was exhausting."
 	]
 
@@ -26,7 +27,6 @@ class Messages:
 	  "I never doubted you."
 	  , "You should program me more often"
 	  , "Best ride of my life."
-	  , "It's my turn to drive you now."
 	  , "I couldn't have done it without you. Actually, I could."
 	]
 
